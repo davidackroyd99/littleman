@@ -1,12 +1,15 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"strconv"
+	"strings"
 )
 
 func main() {
-	Execute([]int16{103, 104, 902, 2, 3})
+	Execute([]int16{901, 391, 901, 392, 901, 393, 591, 192, 293, 902, 0})
 }
 
 // LittleMan is the state of the CPU
@@ -16,14 +19,12 @@ type LittleMan struct {
 	pc     uint8       // Program Counter
 	ir     uint16      // Instruction Register
 	ar     uint8       // Address Register
-	in     chan int16  // Input Area
 	out    chan string // Output Area
 }
 
 // Execute a program on the little man
 func Execute(data []int16) {
 	man := LittleMan{}
-	man.in = make(chan int16)
 	man.out = make(chan string)
 
 	for i, v := range data {
@@ -45,13 +46,14 @@ func Execute(data []int16) {
 }
 
 // Execute the little man
+// TODO implement errors
 func (man *LittleMan) execute() {
 	instruction := man.fetchInstruction()
 	man.pc++
 
 	switch man.ir {
 	case 0:
-		man.stop()
+		man.out <- "QUIT"
 	case 1:
 		man.add()
 	case 2:
@@ -75,11 +77,8 @@ func (man *LittleMan) execute() {
 		fmt.Println(fmt.Sprintf("Invalid instruction %d", instruction))
 	}
 
-	if man.pc > 99 {
-		man.out <- "QUIT"
-	} else {
-		man.execute()
-	}
+	// TODO Implement pc not pointing to valid address
+	man.execute()
 }
 
 // Fetch the next instruction, fill the instruction and address registers and then return the instruction
@@ -89,11 +88,6 @@ func (man *LittleMan) fetchInstruction() int16 {
 	man.ar = uint8(instruction % 100)
 
 	return instruction
-}
-
-// Stop pauses execution (HLT)
-func (man *LittleMan) stop() {
-	return
 }
 
 // Add the value of memory pointed to by the address register to the accumulator
@@ -140,7 +134,17 @@ func (man *LittleMan) io() (ok bool) {
 	switch man.ar {
 	case 1:
 		man.out <- "The little man wants input."
-		man.ac = <-man.in
+
+		reader := bufio.NewReader(os.Stdin)
+		input, _ := reader.ReadString('\n')
+		// TODO this but better
+		inputInt, err := strconv.Atoi(strings.TrimSpace(input))
+
+		if err != nil {
+			inputInt = 0
+		}
+
+		man.ac = int16(inputInt)
 	case 2:
 		man.out <- strconv.Itoa(int(man.ac))
 	case 22:
