@@ -15,3 +15,9 @@ func TestCleanLine(t *testing.T) {
 		t.Errorf("cleanLine(\"ADD 1\") got %v, expected add 1", t2)
 	}
 }
+
+func TestCreateInstruction(t *testing.T) {
+	if ins := createInstruction("ADD 01"); ins.mnemonic != "add" || ins.address != 1 {
+		t.Errorf("createInstruction(\"ADD 1\") got %v %d, expected 'add' 1", ins.mnemonic, ins.address)
+	}
+}
