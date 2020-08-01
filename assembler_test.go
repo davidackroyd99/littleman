@@ -23,4 +23,13 @@ func TestCreateInstruction(t *testing.T) {
 	if ins2 := createInstruction("ADD 1"); ins2.mnemonic != "add" || ins2.address != 1 {
 		t.Errorf("createInstruction(\"ADD 1\") got %v %d, expected 'add' 1", ins2.mnemonic, ins2.address)
 	}
+	if ins3 := createInstruction("HLT"); ins3.mnemonic != "hlt" || ins3.address != 0 {
+		t.Errorf("createInstruction(\"HLT\") got %v %d, expected 'add' 1", ins3.mnemonic, ins3.address)
+	}
+}
+
+func TestParseInstruction(t *testing.T) {
+	if ins := parseInstruction(DecimalInstruction{"hlt", 21}); ins != 0 {
+		t.Errorf("parseInstruction(DecimalInstruction{\"hlt\", 21} got %d, expected 0", ins)
+	}
 }

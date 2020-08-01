@@ -44,8 +44,6 @@ func createInstruction(line string) DecimalInstruction {
 
 	if err == nil {
 		instruction.address = uint8(address)
-	} else {
-		fmt.Println(err)
 	}
 
 	return instruction
@@ -61,9 +59,42 @@ func lexInstructions(lines []string) []DecimalInstruction {
 	return instructions
 }
 
-// func parseInstruction(string instruction) int16 {
-//	switch instruction[:2] {
-//	case "add":
-//
-//	}
-//}
+func parseInstruction(instruction DecimalInstruction) int16 {
+	var opcode int16
+	appendAddress := true
+
+	switch instruction.mnemonic {
+	case "hlt":
+		opcode = 0
+		appendAddress = false
+	case "add":
+		opcode = 100
+	case "sub":
+		opcode = 200
+	case "sta":
+		opcode = 300
+	case "lda":
+		opcode = 500
+	case "bra":
+		opcode = 600
+	case "brz":
+		opcode = 700
+	case "brp":
+		opcode = 800
+	case "inp":
+		opcode = 901
+		appendAddress = false
+	case "out":
+		opcode = 902
+		appendAddress = false
+	case "otc":
+		opcode = 922
+		appendAddress = false
+	}
+
+	if appendAddress {
+		return opcode + int16(instruction.address)
+	} else {
+		return opcode
+	}
+}
