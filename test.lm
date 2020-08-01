@@ -1,0 +1,7 @@
+LDA 5
+LDA 6
+ADD 5
+OUT
+HLT
+DAT 4
+DAT 5

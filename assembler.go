@@ -13,6 +13,8 @@ type DecimalInstruction struct {
 	address  int16
 }
 
+// TODO implement variables
+// Assemble the code in filePath and return it
 func Assemble(filePath string) []int16 {
 	file, err := os.Open(filePath)
 	if err != nil {
@@ -58,6 +60,7 @@ func parseAddress(line string) int16 {
 	return 0
 }
 
+// TODO add some sort of error handling
 func parseInstruction(instruction DecimalInstruction) int16 {
 	var opcode int16
 	appendAddress := true

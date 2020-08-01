@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+// TODO find a way of abstracting the input so the little man doesn't read from STDIN
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Println("No program supplied.")
