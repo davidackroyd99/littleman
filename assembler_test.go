@@ -1,6 +1,8 @@
 package main
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestCleanLine(t *testing.T) {
 	t1 := cleanLine("ADD 1")

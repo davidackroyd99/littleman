@@ -9,7 +9,13 @@ import (
 )
 
 func main() {
-	Execute([]int16{901, 391, 901, 392, 901, 393, 591, 192, 293, 902, 0})
+	if len(os.Args) < 2 {
+		fmt.Println("No program supplied.")
+	} else {
+		machineCode := Assemble(os.Args[1])
+		fmt.Println(machineCode)
+		Execute(machineCode)
+	}
 }
 
 // LittleMan is the state of the CPU

@@ -23,7 +23,9 @@ func Assemble(filePath string) []int16 {
 	scanner := bufio.NewScanner(file)
 	var machineCode []int16
 	for scanner.Scan() {
-		machineCode = append(machineCode, parseInstruction(createInstruction(scanner.Text())))
+		if len(scanner.Text()) >= 3 {
+			machineCode = append(machineCode, parseInstruction(createInstruction(scanner.Text())))
+		}
 	}
 
 	return machineCode
