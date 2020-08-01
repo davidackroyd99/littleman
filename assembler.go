@@ -40,13 +40,25 @@ func createInstruction(line string) DecimalInstruction {
 	instruction.mnemonic = cleaned[:3]
 
 	addr := cleaned[len(cleaned)-2:]
-	fmt.Printf(addr)
-	address, err := strconv.Atoi(addr)
+	address, err := strconv.Atoi(strings.TrimSpace(addr))
+
 	if err == nil {
 		instruction.address = uint8(address)
+	} else {
+		fmt.Println(err)
 	}
 
 	return instruction
+}
+
+func lexInstructions(lines []string) []DecimalInstruction {
+	var instructions []DecimalInstruction
+
+	for _, line := range lines {
+		instructions = append(instructions, createInstruction(line))
+	}
+
+	return instructions
 }
 
 // func parseInstruction(string instruction) int16 {
