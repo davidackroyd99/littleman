@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -11,7 +10,7 @@ import (
 
 type DecimalInstruction struct {
 	mnemonic string
-	address  uint8
+	address  int16
 }
 
 func Assemble(filePath string) []int16 {
@@ -22,11 +21,12 @@ func Assemble(filePath string) []int16 {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
+	var machineCode []int16
 	for scanner.Scan() {
-		fmt.Println(scanner.Text())
+		machineCode = append(machineCode, parseInstruction(createInstruction(scanner.Text())))
 	}
 
-	return []int16{1, 1, 1}
+	return machineCode
 }
 
 func cleanLine(line string) string {
@@ -39,24 +39,21 @@ func createInstruction(line string) DecimalInstruction {
 	var instruction DecimalInstruction
 	instruction.mnemonic = cleaned[:3]
 
-	addr := cleaned[len(cleaned)-2:]
-	address, err := strconv.Atoi(strings.TrimSpace(addr))
-
-	if err == nil {
-		instruction.address = uint8(address)
-	}
+	instruction.address = parseAddress(cleaned)
 
 	return instruction
 }
 
-func lexInstructions(lines []string) []DecimalInstruction {
-	var instructions []DecimalInstruction
+func parseAddress(line string) int16 {
+	for i := 3; i > 0; i-- {
+		address, err := strconv.Atoi(line[len(line)-i:])
 
-	for _, line := range lines {
-		instructions = append(instructions, createInstruction(line))
+		if err == nil {
+			return int16(address)
+		}
 	}
 
-	return instructions
+	return 0
 }
 
 func parseInstruction(instruction DecimalInstruction) int16 {
@@ -90,6 +87,8 @@ func parseInstruction(instruction DecimalInstruction) int16 {
 	case "otc":
 		opcode = 922
 		appendAddress = false
+	case "dat":
+		return instruction.address
 	}
 
 	if appendAddress {

@@ -26,6 +26,9 @@ func TestCreateInstruction(t *testing.T) {
 	if ins3 := createInstruction("HLT"); ins3.mnemonic != "hlt" || ins3.address != 0 {
 		t.Errorf("createInstruction(\"HLT\") got %v %d, expected 'add' 1", ins3.mnemonic, ins3.address)
 	}
+	if ins4 := createInstruction("DAT 123"); ins4.mnemonic != "dat" || ins4.address != 123 {
+		t.Errorf("createInstruction(\"DAT 123\") got %v %d, expected 'dat' 123", ins4.mnemonic, ins4.address)
+	}
 }
 
 func TestParseInstruction(t *testing.T) {
