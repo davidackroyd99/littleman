@@ -48,6 +48,7 @@ func createInstruction(line string) DecimalInstruction {
 	return instruction
 }
 
+// TODO test me
 func parseAddress(line string) int16 {
 	for i := 3; i > 0; i-- {
 		address, err := strconv.Atoi(line[len(line)-i:])

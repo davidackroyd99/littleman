@@ -84,7 +84,9 @@ func (man *LittleMan) execute() {
 		fmt.Println(fmt.Sprintf("Invalid instruction %d", instruction))
 	}
 
-	// TODO Implement pc not pointing to valid address
+	if man.pc > 99 || man.pc < 0 {
+		fmt.Println("Program counter pointing to out of range address %d", man.pc)
+	}
 	man.execute()
 }
 
