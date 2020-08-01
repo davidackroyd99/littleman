@@ -32,4 +32,7 @@ func TestParseInstruction(t *testing.T) {
 	if ins := parseInstruction(DecimalInstruction{"hlt", 21}); ins != 0 {
 		t.Errorf("parseInstruction(DecimalInstruction{\"hlt\", 21} got %d, expected 0", ins)
 	}
+	if ins := parseInstruction(DecimalInstruction{"brz", 21}); ins != 721 {
+		t.Errorf("parseInstruction(DecimalInstruction{\"brz\", 21} got %d, expected 721", ins)
+	}
 }
